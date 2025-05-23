@@ -4,9 +4,13 @@ import {getUsersForSidebar,getMessages,sendMessage} from '../controllers/message
 
 const router = express.Router()
 
-// Simple routes without complex parameters
+// Get all users for sidebar
 router.get("/users", protectRoute, getUsersForSidebar)
-router.get("/:id", protectRoute, getMessages)
-router.post("/:id", protectRoute, sendMessage)
+
+// Get messages between two users
+router.get("/messages/:id", protectRoute, getMessages)
+
+// Send a message to a user
+router.post("/messages/:id", protectRoute, sendMessage)
 
 export default router;
