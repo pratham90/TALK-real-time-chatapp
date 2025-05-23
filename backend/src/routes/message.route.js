@@ -2,11 +2,11 @@ import express from 'express'
 import {protectRoute} from '../middlewares/auth.middleware.js'
 import {getUsersForSidebar,getMessages,sendMessage} from '../controllers/message.controller.js'
 
-const route = express.Router()
+const router = express.Router()
 
-route.get("/user",protectRoute,getUsersForSidebar)
+// Simple routes without complex parameters
+router.get("/users", protectRoute, getUsersForSidebar)
+router.get("/:id", protectRoute, getMessages)
+router.post("/:id", protectRoute, sendMessage)
 
-route.get("/messages/:userId",protectRoute,getMessages)
-route.post("/send/:userId",protectRoute,sendMessage)
-
-export default route;
+export default router;
