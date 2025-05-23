@@ -17,13 +17,13 @@ export const getUsersForSidebar = async(req,res)=>{
 
 export const getMessages = async(req,res)=>{
     try {
-        const {receiverId} = req.params;
+        const {userId} = req.params;
         const myId = req.user._id;
 
         const messages = await Message.find({
             $or:[
-                {senderId:myId,receiverId:receiverId},
-                {senderId:receiverId,receiverId:myId}
+                {senderId:myId,receiverId:userId},
+                {senderId:userId,receiverId:myId}
             ]
         })
         res.status(200).json(messages)
@@ -36,7 +36,7 @@ export const getMessages = async(req,res)=>{
 export const sendMessage = async (req,res) =>{
     try{
    const {text,image} = req.body;
-   const {receiverId} = req.params;
+   const {userId} = req.params;
   const senderId = req.user._id;
  
   let imageUrl;
@@ -46,13 +46,13 @@ export const sendMessage = async (req,res) =>{
   }
  const newMessage = new Message({
      senderId,
-     receiverId,
+     receiverId: userId,
     text,
     image:imageUrl,
  })
  await newMessage.save();
 
- const receiverSocketId = getReceiverSocketId(receiverId);
+ const receiverSocketId = getReceiverSocketId(userId);
  if(receiverSocketId){
     io.to(receiverSocketId).emit("newMessage",newMessage)
  }
